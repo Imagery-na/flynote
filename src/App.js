@@ -1,78 +1,88 @@
-import logo from './logo.svg';
-import React, { useEffect, useState } from 'react';
-import './App.css';
 import axios from 'axios';
+import React, { Component } from 'react';
+import './App.css';
+import logo from './logo.svg';
+class App extends Component {
+    constructor(props) {
+        super(props);
 
-function App() {
-    const [notes, setNotes] = useState([]);
-    const [myNote, setMyNote] = useState('');
-
-    useEffect(
-        () => {
-            axios.get('https://bonus.dev.thewhite.ru/api/news-service/articles/list')
-                .then((response) => {
-                    console.log('get', response.data);
-                    setNotes(response.data);
-                })
-                .catch((error) => console.log(error));
-        },
-        [],
-    );
-
-    function saveNote() {
-        const newNotes = notes;
-        newNotes.push({
-            name: myNote,
-        });
-        console.log(newNotes);
-        setNotes(newNotes);
+        this.state = {
+            myNote: '',
+            notes: [],
+        }
     }
 
-    return (
-        <div className="App">
-        <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
-                FlyNote
-            </p>
-        </header>
-        <main>
-            <h1>
-                FLYNOTE NOTES
-            </h1>
+    componentDidMount() {
+        this.loadNotes();
+    }
+
+    loadNotes = () => {
+        axios.get('https://bonus.dev.thewhite.ru/api/news-service/articles/list')
+            .then((response) => {
+                console.log('get', response.data);
+                this.setState({ notes: response.data });
+            })
+            .catch((error) => console.log(error));
+    };
+
+    saveNote = () => {
+        const newNotes = this.state.notes;
+        newNotes.push({
+            name: this.state.myNote,
+        });
+        console.log(newNotes);
+        this.setState({ notes: newNotes });
+    }
+
+    render() {
+        return (
+            <div className="App">
+            <header className="App-header">
+                <img src={logo} className="App-logo" alt="logo" />
+                <p>
+                    FlyNote
+                </p>
+            </header>
             <main>
-                <div
-                    className="wrapper"
-                >
-                    <textarea
-                        placeholder="Напишите заметку"
-                        value={myNote}
-                        onChange={(event) => setMyNote(event.target.value)}
-                    />
-                    <button
-                        className="save-button"
-                        onClick={() => saveNote()}
+                <h1>
+                    FLYNOTE NOTES
+                </h1>
+                <main>
+                    <div
+                        className="wrapper"
                     >
-                        Сохранить
-                    </button>
-                </div>
-                <ul
-                    className="notes"
-                >
-                    {
-                        notes.map((note, index) => (
-                            <li
-                                key={index}
-                            >
-                                {note.name}
-                            </li>
-                        ))
-                    }
-                </ul>
+                        <textarea
+                            placeholder="Напишите заметку"
+                            value={this.state.myNote}
+                            onChange={(event) => this.setState({myNote: event.target.value})}
+                        />
+                        <button
+                            className="save-button"
+                            onClick={this.saveNote}
+                        >
+                            Сохранить
+                        </button>
+                    </div>
+                    <ul
+                        className="notes"
+                    >
+                        {
+                            this.state.notes.map((note, index) => (
+                                <li
+                                    key={index}
+                                >
+                                    {note.name}
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </main>
             </main>
-        </main>
-        </div>
-    );
+            </div>
+        );
+    }
+
+  
 }
 
 export default App;
