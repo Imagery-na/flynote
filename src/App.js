@@ -47,36 +47,34 @@ class App extends Component {
                 <h1>
                     FLYNOTE NOTES
                 </h1>
-                <main>
-                    <div
-                        className="wrapper"
+                <div
+                    className="wrapper"
+                >
+                    <textarea
+                        placeholder="Напишите заметку"
+                        value={this.state.myNote}
+                        onChange={(event) => this.setState({myNote: event.target.value})}
+                    />
+                    <button
+                        className="save-button"
+                        onClick={this.saveNote}
                     >
-                        <textarea
-                            placeholder="Напишите заметку"
-                            value={this.state.myNote}
-                            onChange={(event) => this.setState({myNote: event.target.value})}
-                        />
-                        <button
-                            className="save-button"
-                            onClick={this.saveNote}
-                        >
-                            Сохранить
-                        </button>
-                    </div>
-                    <ul
-                        className="notes"
-                    >
-                        {
-                            this.state.notes.map((note, index) => (
-                                <li
-                                    key={index}
-                                >
-                                    {note.name}
-                                </li>
-                            ))
-                        }
-                    </ul>
-                </main>
+                        Сохранить
+                    </button>
+                </div>
+                <ul
+                    className="notes"
+                >
+                    {
+                        this.state.notes.map((note, index) => (
+                            <li
+                                key={index}
+                            >
+                                {note.name}
+                            </li>
+                        ))
+                    }
+                </ul>
             </main>
             </div>
         );
